@@ -1,19 +1,14 @@
 import json
+from dataclasses import dataclass, field
 from typing import Any, Dict
 
 
+@dataclass
 class EARClaims:
-    def __init__(
-        self,
-        profile: str,
-        issued_at: int,
-        verifier_id: Dict[str, str],
-        submods: Dict[str, Any],
-    ):
-        self.profile = profile
-        self.issued_at = issued_at
-        self.verifier_id = verifier_id
-        self.submods = submods
+    profile: str
+    issued_at: int
+    verifier_id: Dict[str, str] = field(default_factory=dict)
+    submods: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
