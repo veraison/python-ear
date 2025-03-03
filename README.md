@@ -1,12 +1,12 @@
 # **python-ear**
 
-A Python library that implements the [draft-fv-rats-ear](https://datatracker.ietf.org/doc/draft-fv-rats-ear/) specification, focusing on Evidence and Attestation Results (EAR) in Remote Attestation Procedures (RATS). This library enables secure handling of attestation claims using Concise Binary Object Representation (CBOR) Web Tokens (CWT) and JSON Web Tokens (JWT).  
+A Python library that implements the EAT Attestation Result (EAR) data format, as specified in [draft-fv-rats-ear](https://datatracker.ietf.org/doc/draft-fv-rats-ear/). This library provides implementations for both CBOR-based and JSON-based serialisations.
 
 ---
 
 ## **Overview**
 
-The goal of this project is to align open-source verifiers with the RATS architecture by defining standardized evidence formats and attestation results, facilitating seamless integration with other projects such as **Keylime**.
+The goal of this project is to standardize attestation results by defining a shared information and data model, enabling seamless integration with other components of the RATS architecture. This focuses specifically on harmonizing attestation results to facilitate interoperability between various verifiers and relying parties.
 
 This implementation was initiated as part of the **Veraison Mentorship** under the Linux Foundation Mentorship Program (**LFX Mentorship**), focusing on the following capabilities:
 
