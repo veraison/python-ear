@@ -1,0 +1,10 @@
+python-jose==3.4.0
+cwt==2.8.0
+black==24.8.0
+isort==5.12.0
+flake8==6.0.0
+mypy==1.5.1
+pytest==7.4.2
+tox==4.24.1
+pyright==1.1.325
+pylint==2.17.5
