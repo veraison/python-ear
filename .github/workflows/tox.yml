@@ -1,0 +1,34 @@
+name: Run Tox on PR
+
+on:
+  pull_request:
+    branches:
+      - main
+      - '**'  # Run on all branches for PRs
+
+jobs:
+  tox-tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.11]  # Test against multiple Python versions
+
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Setup Python
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Install tox
+      - name: Install tox
+        run: pip install tox
+
+      # Run tox
+      - name: Run tox
+        run: tox
