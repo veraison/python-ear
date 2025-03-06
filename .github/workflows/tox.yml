@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.11]  # Test against multiple Python versions
+        python-version: [3.9, 3.11]  # Test against multiple Python versions
 
     steps:
       # Checkout the code
