@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict
 
 
+# Abstract class to define structure to subclasses
 class BaseJCSerializable(ABC):
     JC_map: Dict[str, int]
 
@@ -10,6 +11,7 @@ class BaseJCSerializable(ABC):
     def to_dict(self) -> Dict[str, Any]:
         pass
 
+    # Similar for all the subclasses
     def to_json(self) -> str:
         return json.dumps(self.to_dict())
 
