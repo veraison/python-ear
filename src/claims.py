@@ -2,11 +2,11 @@ import json
 from dataclasses import dataclass, field
 from typing import Any, Dict
 
+from src.trust_tier import to_trust_tier
 from src.trust_vector import TrustVector
 from src.verifier_id import VerifierID
 
 
-# Represents the EAR Claims set that will be populated
 @dataclass
 class EARClaims:
     profile: str
@@ -14,7 +14,6 @@ class EARClaims:
     verifier_id: VerifierID
     submods: Dict[str, Dict[str, Any]] = field(default_factory=dict)
 
-    # Returns a python dictionary that will be used for serializing to JWT
     def to_dict(self) -> Dict[str, Any]:
         return {
             "eat_profile": self.profile,
@@ -23,7 +22,7 @@ class EARClaims:
             "submods": {
                 key: {
                     "trust_vector": value["trust_vector"].to_dict(),
-                    "status": value["status"],
+                    "status": value["status"].value,
                 }
                 for key, value in self.submods.items()
             },
@@ -40,8 +39,8 @@ class EARClaims:
             verifier_id=VerifierID.from_dict(data.get("ear.verifier-id", {})),
             submods={
                 key: {
-                    "trust_vector": TrustVector.from_dict(value["trust_vector"]),  # noqa: E501
-                    "status": value["status"],
+                    "trust_vector": TrustVector.from_dict(value["trust_vector"]),
+                    "status": to_trust_tier(value["status"]),
                 }
                 for key, value in data.get("submods", {}).items()
             },

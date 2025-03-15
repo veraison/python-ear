@@ -1,16 +1,13 @@
 import pytest
 
 from src.claims import EARClaims
-from src.trust_claims import (
-    ApprovedConfigClaim,
-    ApprovedFilesClaim,
-    ApprovedRuntimeClaim,
-    EncryptedMemoryRuntimeClaim,
-    GenuineHardwareClaim,
-    HwKeysEncryptedSecretsClaim,
-    TrustedSourcesClaim,
-    TrustworthyInstanceClaim,
-)
+from src.trust_claims import (ApprovedConfigClaim, ApprovedFilesClaim,
+                              ApprovedRuntimeClaim,
+                              EncryptedMemoryRuntimeClaim,
+                              GenuineHardwareClaim,
+                              HwKeysEncryptedSecretsClaim, TrustedSourcesClaim,
+                              TrustworthyInstanceClaim)
+from src.trust_tier import TrustTierAffirming
 from src.trust_vector import TrustVector
 from src.verifier_id import VerifierID
 
@@ -33,7 +30,7 @@ def sample_ear_claims():
                     storage_opaque=HwKeysEncryptedSecretsClaim,
                     sourced_data=TrustedSourcesClaim,
                 ),
-                "status": "affirming",
+                "status": TrustTierAffirming,
             }
         },
     )
@@ -56,7 +53,7 @@ def test_ear_claims_to_dict(sample_ear_claims):
                     "storage_opaque": HwKeysEncryptedSecretsClaim.to_dict(),
                     "sourced_data": TrustedSourcesClaim.to_dict(),
                 },
-                "status": "affirming",
+                "status": TrustTierAffirming.value,
             }
         },
     }
@@ -86,7 +83,7 @@ def test_ear_claims_from_dict():
                     "storage_opaque": HwKeysEncryptedSecretsClaim.to_dict(),
                     "sourced_data": TrustedSourcesClaim.to_dict(),
                 },
-                "status": "affirming",
+                "status": TrustTierAffirming.value,
             }
         },
     }
