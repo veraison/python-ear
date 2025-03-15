@@ -2,16 +2,11 @@ import json
 
 import pytest
 
-from src.trust_claims import (
-    ApprovedFilesClaim,
-    ApprovedRuntimeClaim,
-    EncryptedMemoryRuntimeClaim,
-    GenuineHardwareClaim,
-    HwKeysEncryptedSecretsClaim,
-    TrustedSourcesClaim,
-    TrustworthyInstanceClaim,
-    UnsafeConfigClaim,
-)
+from src.trust_claims import (ApprovedFilesClaim, ApprovedRuntimeClaim,
+                              EncryptedMemoryRuntimeClaim,
+                              GenuineHardwareClaim,
+                              HwKeysEncryptedSecretsClaim, TrustedSourcesClaim,
+                              TrustworthyInstanceClaim, UnsafeConfigClaim)
 from src.trust_vector import TrustVector
 
 
@@ -90,4 +85,6 @@ def test_trust_vector_from_cbor():
         7: TrustedSourcesClaim.to_dict(),
     }
     parsed_vector = TrustVector.from_cbor(cbor_data)
-    assert parsed_vector.to_dict() == TrustVector.from_cbor(cbor_data).to_dict()  # noqa: E501
+    assert (
+        parsed_vector.to_dict() == TrustVector.from_cbor(cbor_data).to_dict()
+    )  # noqa: E501
