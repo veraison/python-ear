@@ -4,11 +4,11 @@ from typing import Any, Dict
 from src.base import BaseJCSerializable
 
 
+# https://www.ietf.org/archive/id/draft-ietf-rats-ar4si-08.html#section-3.3
 @dataclass
 class VerifierID(BaseJCSerializable):
     developer: str
     build: str
-    # https://www.ietf.org/archive/id/draft-ietf-rats-ar4si-08.html#section-3.3
     JC_map = {
         "developer": 0,  # JC<"developer", 0>
         "build": 1,  # JC<"build", 1>
