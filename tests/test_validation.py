@@ -1,12 +1,15 @@
 import pytest
 
-from src.claims import EARClaims
-from src.trust_claims import (TrustClaim, TrustworthyInstanceClaim,
-                              UnsafeConfigClaim)
+from src.claims import AttestationResult
+from src.trust_claims import TRUSTWORTHY_INSTANCE_CLAIM, UNSAFE_CONFIG_CLAIM, TrustClaim
 from src.trust_vector import TrustVector
-from src.validation import (EARValidationError, validate_ear_claims,
-                            validate_trust_claim, validate_trust_vector,
-                            validate_verifier_id)
+from src.validation import (
+    EARValidationError,
+    validate_ear_claims,
+    validate_trust_claim,
+    validate_trust_vector,
+    validate_verifier_id,
+)
 from src.verifier_id import VerifierID
 
 
@@ -23,8 +26,8 @@ def valid_trust_claim():
 @pytest.fixture
 def valid_trust_vector():
     return TrustVector(
-        instance_identity=TrustworthyInstanceClaim,
-        configuration=UnsafeConfigClaim,
+        instance_identity=TRUSTWORTHY_INSTANCE_CLAIM,
+        configuration=UNSAFE_CONFIG_CLAIM,
     )
 
 
@@ -35,7 +38,7 @@ def valid_verifier_id():
 
 @pytest.fixture
 def valid_ear_claims(valid_trust_vector, valid_verifier_id):
-    return EARClaims.from_dict(
+    return AttestationResult.from_dict(
         {
             "eat_profile": "test_profile",
             "iat": 1234567890,
@@ -92,7 +95,7 @@ def test_validate_ear_claims(valid_ear_claims):
 
 def test_validate_ear_claims_invalid():
     with pytest.raises(EARValidationError):
-        invalid_claims = EARClaims(
+        invalid_claims = AttestationResult(
             profile="", issued_at=-1, verifier_id=VerifierID(developer="", build="")
         )
         validate_ear_claims(invalid_claims)

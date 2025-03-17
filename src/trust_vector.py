@@ -5,6 +5,7 @@ from src.base import BaseJCSerializable
 from src.trust_claims import TrustClaim
 
 
+# https://www.ietf.org/archive/id/draft-ietf-rats-ar4si-08.html#section-3.1
 # TrustVector class to represent the trustworthiness vector
 @dataclass
 class TrustVector(BaseJCSerializable):
@@ -17,7 +18,6 @@ class TrustVector(BaseJCSerializable):
     storage_opaque: Optional[TrustClaim] = None
     sourced_data: Optional[TrustClaim] = None
 
-    # https://www.ietf.org/archive/id/draft-ietf-rats-ar4si-08.html#section-3.1
     JC_map = {
         "instance_identity": 0,
         "configuration": 1,
