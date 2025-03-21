@@ -9,7 +9,7 @@ from src.base import BaseJCSerializable
 class VerifierID(BaseJCSerializable):
     developer: str
     build: str
-    JC_map = {
+    jc_map = {
         "developer": 0,  # JC<"developer", 0>
         "build": 1,  # JC<"build", 1>
     }
@@ -20,7 +20,7 @@ class VerifierID(BaseJCSerializable):
     # Convert to a dict with integer keys (for CBOR)
     def to_cbor(self) -> Dict[int, str]:
         return {
-            index: getattr(self, field) for field, index in self.JC_map.items()
+            index: getattr(self, field) for field, index in self.jc_map.items()
         }  # noqa: E501
 
     # Create an instance from a dict with string keys
@@ -31,6 +31,6 @@ class VerifierID(BaseJCSerializable):
     # Create an instance from a CBOR-like dict (integer keys)
     @classmethod
     def from_cbor(cls, data: Dict[int, str]):
-        reverse_map = {v: k for k, v in cls.JC_map.items()}
+        reverse_map = {v: k for k, v in cls.jc_map.items()}
         kwargs = {reverse_map[index]: value for index, value in data.items()}
         return cls(**kwargs)

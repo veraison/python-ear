@@ -5,7 +5,7 @@ from typing import Any, Dict
 
 # Abstract class to define structure to subclasses
 class BaseJCSerializable(ABC):
-    JC_map: Dict[str, int]
+    jc_map: Dict[str, int]
 
     @abstractmethod
     def to_dict(self) -> Dict[str, Any]:

@@ -17,7 +17,7 @@ class AttestationResult(BaseJCSerializable):
     submods: Dict[str, Dict[str, Any]] = field(default_factory=dict)
 
     # https://www.ietf.org/archive/id/draft-ietf-rats-eat-31.html#section-7.2.4
-    JC_map = {
+    jc_map = {
         "profile": 265,
         "issued_at": 6,
         "verifier_id": 1004,
@@ -42,13 +42,13 @@ class AttestationResult(BaseJCSerializable):
 
     def to_cbor(self) -> Dict[int, Any]:
         return {
-            self.JC_map["profile"]: self.profile,
-            self.JC_map["issued_at"]: self.issued_at,
-            self.JC_map["verifier_id"]: self.verifier_id.to_cbor(),
-            self.JC_map["submods"]: {
+            self.jc_map["profile"]: self.profile,
+            self.jc_map["issued_at"]: self.issued_at,
+            self.jc_map["verifier_id"]: self.verifier_id.to_cbor(),
+            self.jc_map["submods"]: {
                 key: {
-                    self.JC_map["submod.trust_vector"]: value["trust_vector"].to_cbor(),
-                    self.JC_map["submod.status"]: value["status"].value,
+                    self.jc_map["submod.trust_vector"]: value["trust_vector"].to_cbor(),
+                    self.jc_map["submod.status"]: value["status"].value,
                 }
                 for key, value in self.submods.items()
             },
@@ -76,16 +76,16 @@ class AttestationResult(BaseJCSerializable):
     @classmethod
     def from_cbor(cls, data: Dict[int, Any]):
         return cls(
-            profile=data.get(cls.JC_map["profile"], ""),
-            issued_at=data.get(cls.JC_map["issued_at"], 0),
-            verifier_id=VerifierID.from_cbor(data.get(cls.JC_map["verifier_id"], {})),
+            profile=data.get(cls.jc_map["profile"], ""),
+            issued_at=data.get(cls.jc_map["issued_at"], 0),
+            verifier_id=VerifierID.from_cbor(data.get(cls.jc_map["verifier_id"], {})),
             submods={
                 key: {
                     "trust_vector": TrustVector.from_cbor(
-                        value.get(cls.JC_map["submod.trust_vector"], {})
+                        value.get(cls.jc_map["submod.trust_vector"], {})
                     ),
-                    "status": to_trust_tier(value.get(cls.JC_map["submod.status"], 0)),
+                    "status": to_trust_tier(value.get(cls.jc_map["submod.status"], 0)),
                 }
-                for key, value in data.get(cls.JC_map["submods"], {}).items()
+                for key, value in data.get(cls.jc_map["submods"], {}).items()
             },
         )

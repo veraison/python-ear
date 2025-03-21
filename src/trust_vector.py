@@ -18,7 +18,7 @@ class TrustVector(BaseJCSerializable):
     storage_opaque: Optional[TrustClaim] = None
     sourced_data: Optional[TrustClaim] = None
 
-    JC_map = {
+    jc_map = {
         "instance_identity": 0,
         "configuration": 1,
         "executables": 2,
@@ -35,7 +35,7 @@ class TrustVector(BaseJCSerializable):
     def to_cbor(self) -> Dict[int, Dict[str, Any]]:
         return {
             index: getattr(self, field).to_dict()
-            for field, index in self.JC_map.items()
+            for field, index in self.jc_map.items()
             if getattr(self, field)
         }
 
@@ -43,13 +43,13 @@ class TrustVector(BaseJCSerializable):
     def from_dict(cls, data: Dict[str, Any]):
         kwargs = {
             field: TrustClaim(**data[field]) if data.get(field) else None
-            for field in cls.JC_map
+            for field in cls.jc_map
         }
         return cls(**kwargs)
 
     @classmethod
     def from_cbor(cls, data: Dict[int, Dict[str, Any]]):
-        reverse_map = {v: k for k, v in cls.JC_map.items()}
+        reverse_map = {v: k for k, v in cls.jc_map.items()}
         kwargs = {
             reverse_map[index]: TrustClaim(**value)
             for index, value in data.items()
