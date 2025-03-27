@@ -1,0 +1,46 @@
+{
+    "eat_profile": "test_profile",
+    "iat": 1743076236,
+    "ear.verifier-id": {
+        "developer": "Acme Inc.",
+        "build": "v1"
+    },
+    "submods": {
+        "submod1": {
+            "trust_vector": {
+                "instance_identity": {
+                    "value": 97,
+                    "tag": "unrecognized_instance",
+                    "short": "not recognized",
+                    "long": "The Attesting Environment is not recognized; however the Verifier believes it should be."
+                },
+                "configuration": null,
+                "executables": null,
+                "file_system": null,
+                "hardware": null,
+                "runtime_opaque": null,
+                "storage_opaque": null,
+                "sourced_data": null
+            },
+            "status": 2
+        },
+        "submod2": {
+            "trust_vector": {
+                "instance_identity": {
+                    "value": 2,
+                    "tag": "recognized_instance",
+                    "short": "recognized and not compromised",
+                    "long": "The Attesting Environment is recognized, and the associated instance of the Attester is not known to be compromised."
+                },
+                "configuration": null,
+                "executables": null,
+                "file_system": null,
+                "hardware": null,
+                "runtime_opaque": null,
+                "storage_opaque": null,
+                "sourced_data": null
+            },
+            "status": 96
+        }
+    }
+}
