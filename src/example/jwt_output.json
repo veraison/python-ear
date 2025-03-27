@@ -1,128 +1,46 @@
 {
-    "generated_secret_key": "d09f32...50287c7a7a6",
-    "original_attestation_result_json": {
-        "eat_profile": "test_profile",
-        "iat": 1742287718,
-        "ear.verifier-id": {
-            "developer": "Acme Inc.",
-            "build": "v1"
-        },
-        "submods": {
-            "submod1": {
-                "trust_vector": {
-                    "instance_identity": {
-                        "value": 97,
-                        "tag": "unrecognized_instance",
-                        "short": "not recognized",
-                        "long": "The Attesting Environment is not recognized; however the Verifier believes it should be."
-                    },
-                    "configuration": null,
-                    "executables": null,
-                    "file_system": null,
-                    "hardware": null,
-                    "runtime_opaque": null,
-                    "storage_opaque": null,
-                    "sourced_data": null
-                },
-                "status": 2
-            },
-            "submod2": {
-                "trust_vector": {
-                    "instance_identity": {
-                        "value": 2,
-                        "tag": "recognized_instance",
-                        "short": "recognized and not compromised",
-                        "long": "The Attesting Environment is recognized, and the associated instance of the Attester is not known to be compromised."
-                    },
-                    "configuration": null,
-                    "executables": null,
-                    "file_system": null,
-                    "hardware": null,
-                    "runtime_opaque": null,
-                    "storage_opaque": null,
-                    "sourced_data": null
-                },
-                "status": 96
-            }
-        }
+    "eat_profile": "test_profile",
+    "iat": 1743076236,
+    "ear.verifier-id": {
+        "developer": "Acme Inc.",
+        "build": "v1"
     },
-    "original_attestation_result_cbor": {
-        "265": "test_profile",
-        "6": 1742287718,
-        "1004": {
-            "0": "Acme Inc.",
-            "1": "v1"
-        },
-        "266": {
-            "submod1": {
-                "1001": {
-                    "0": {
-                        "value": 97,
-                        "tag": "unrecognized_instance",
-                        "short": "not recognized",
-                        "long": "The Attesting Environment is not recognized; however the Verifier believes it should be."
-                    }
+    "submods": {
+        "submod1": {
+            "trust_vector": {
+                "instance_identity": {
+                    "value": 97,
+                    "tag": "unrecognized_instance",
+                    "short": "not recognized",
+                    "long": "The Attesting Environment is not recognized; however the Verifier believes it should be."
                 },
-                "1000": 2
+                "configuration": null,
+                "executables": null,
+                "file_system": null,
+                "hardware": null,
+                "runtime_opaque": null,
+                "storage_opaque": null,
+                "sourced_data": null
             },
-            "submod2": {
-                "1001": {
-                    "0": {
-                        "value": 2,
-                        "tag": "recognized_instance",
-                        "short": "recognized and not compromised",
-                        "long": "The Attesting Environment is recognized, and the associated instance of the Attester is not known to be compromised."
-                    }
-                },
-                "1000": 96
-            }
-        }
-    },
-    "signed_jwt_token": "eyJhbGciOiJIU...LWmmfns12U",
-    "decoded_attestation_result": {
-        "eat_profile": "test_profile",
-        "iat": 1742287718,
-        "ear.verifier-id": {
-            "developer": "Acme Inc.",
-            "build": "v1"
+            "status": 2
         },
-        "submods": {
-            "submod1": {
-                "trust_vector": {
-                    "instance_identity": {
-                        "value": 97,
-                        "tag": "unrecognized_instance",
-                        "short": "not recognized",
-                        "long": "The Attesting Environment is not recognized; however the Verifier believes it should be."
-                    },
-                    "configuration": null,
-                    "executables": null,
-                    "file_system": null,
-                    "hardware": null,
-                    "runtime_opaque": null,
-                    "storage_opaque": null,
-                    "sourced_data": null
+        "submod2": {
+            "trust_vector": {
+                "instance_identity": {
+                    "value": 2,
+                    "tag": "recognized_instance",
+                    "short": "recognized and not compromised",
+                    "long": "The Attesting Environment is recognized, and the associated instance of the Attester is not known to be compromised."
                 },
-                "status": 2
+                "configuration": null,
+                "executables": null,
+                "file_system": null,
+                "hardware": null,
+                "runtime_opaque": null,
+                "storage_opaque": null,
+                "sourced_data": null
             },
-            "submod2": {
-                "trust_vector": {
-                    "instance_identity": {
-                        "value": 2,
-                        "tag": "recognized_instance",
-                        "short": "recognized and not compromised",
-                        "long": "The Attesting Environment is recognized, and the associated instance of the Attester is not known to be compromised."
-                    },
-                    "configuration": null,
-                    "executables": null,
-                    "file_system": null,
-                    "hardware": null,
-                    "runtime_opaque": null,
-                    "storage_opaque": null,
-                    "sourced_data": null
-                },
-                "status": 96
-            }
+            "status": 96
         }
     }
 }

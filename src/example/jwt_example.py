@@ -1,11 +1,13 @@
 from datetime import datetime
 
 from src.claims import AttestationResult
-from src.jwt_handler import decode_ear_claims, generate_secret_key, sign_ear_claims
+from src.jwt_config import generate_secret_key
 from src.trust_claims import TRUSTWORTHY_INSTANCE_CLAIM, UNRECOGNIZED_INSTANCE_CLAIM
 from src.trust_tier import TRUST_TIER_AFFIRMING, TRUST_TIER_CONTRAINDICATED
 from src.trust_vector import TrustVector
 from src.verifier_id import VerifierID
+
+# import json
 
 # Generate a secret key for signing
 secret_key = generate_secret_key()
@@ -27,24 +29,13 @@ attestation_result = AttestationResult(
     },
 )
 
-signed_jwt_token = sign_ear_claims(attestation_result, secret_key)
+# payload = attestation_result.encode_jwt(secret_key=secret_key)
+# print(payload)
 
-# Prepare data to be written to a JSON file
-output_data = {
-    "generated_secret_key": secret_key,
-    "original_attestation_result_json": attestation_result.to_dict(),
-    "original_attestation_result_cbor": attestation_result.to_cbor(),
-    "signed_jwt_token": signed_jwt_token,
-}
+# decoded = AttestationResult.decode_jwt(token=payload, secret_key=secret_key)
+# output_data = decoded.to_dict()
 
-# Decode the JWT and add decoded claims
-decoded_claims = decode_ear_claims(signed_jwt_token, secret_key)
-output_data["decoded_attestation_result"] = decoded_claims.to_dict()
+# with open("jwt_output.json", "w", encoding="utf-8") as f:
+#     json.dump(output_data, f, indent=4)
 
-# Save to output.json
-"""
-with open("jwt_output.json", "w", encoding="utf-8") as f:
-    json.dump(output_data, f, indent=4)
-
-print("Output successfully written to output.json")
-"""
+# print("Output successfully written to output.json")
