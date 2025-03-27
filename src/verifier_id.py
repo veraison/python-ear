@@ -2,6 +2,7 @@ from dataclasses import asdict, dataclass
 from typing import Any, Dict
 
 from src.base import BaseJCSerializable
+from src.errors import EARValidationError
 
 
 # https://www.ietf.org/archive/id/draft-ietf-rats-ar4si-08.html#section-3.3
@@ -34,3 +35,10 @@ class VerifierID(BaseJCSerializable):
         reverse_map = {v: k for k, v in cls.jc_map.items()}
         kwargs = {reverse_map[index]: value for index, value in data.items()}
         return cls(**kwargs)
+
+    def validate(self):
+        # Validates a VerifierID object
+        if not self.developer or not isinstance(self.developer, str):
+            raise EARValidationError("VerifierID developer must be a non-empty string")
+        if not self.build or not isinstance(self.build, str):
+            raise EARValidationError("VerifierID build must be a non-empty string")

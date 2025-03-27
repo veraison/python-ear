@@ -1,6 +1,7 @@
 import pytest
 
 from src.claims import AttestationResult
+from src.errors import EARValidationError
 from src.trust_claims import (
     APPROVED_CONFIG_CLAIM,
     APPROVED_FILES_CLAIM,
@@ -144,3 +145,16 @@ def test_attestation_result_from_cbor():
 
     parsed_claims = AttestationResult.from_cbor(cbor_data)
     assert parsed_claims.to_cbor() == cbor_data
+
+
+def test_validate_ear_claims(sample_attestation_result):
+    # Should not raise an error
+    sample_attestation_result.validate()
+
+
+def test_validate_ear_claims_invalid():
+    with pytest.raises(EARValidationError):
+        invalid_attestation_result = AttestationResult(
+            profile="", issued_at=-1, verifier_id=VerifierID(developer="", build="")
+        )
+        invalid_attestation_result.validate()

@@ -2,6 +2,7 @@ import json
 
 import pytest
 
+from src.errors import EARValidationError
 from src.verifier_id import VerifierID
 
 
@@ -38,3 +39,14 @@ def test_from_cbor():
     sample_verifier = VerifierID.from_cbor(cbor_data)
     assert sample_verifier.developer == "Acme Inc."
     assert sample_verifier.build == "v1.0.0"
+
+
+def test_validate_verifier_id(verifier):
+    # Should not raise an error
+    verifier.validate()
+
+
+def test_validate_verifier_id_invalid():
+    with pytest.raises(EARValidationError):
+        invalid_verifier_id = VerifierID(developer="", build="")  # Invalid empty fields
+        invalid_verifier_id.validate()

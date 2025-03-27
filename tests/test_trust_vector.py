@@ -2,6 +2,7 @@ import json
 
 import pytest
 
+from src.errors import EARValidationError
 from src.trust_claims import (
     APPROVED_FILES_CLAIM,
     APPROVED_RUNTIME_CLAIM,
@@ -11,6 +12,7 @@ from src.trust_claims import (
     TRUSTED_SOURCES_CLAIM,
     TRUSTWORTHY_INSTANCE_CLAIM,
     UNSAFE_CONFIG_CLAIM,
+    TrustClaim,
 )
 from src.trust_vector import TrustVector
 
@@ -93,3 +95,16 @@ def test_trust_vector_from_cbor():
     assert (
         parsed_vector.to_dict() == TrustVector.from_cbor(cbor_data).to_dict()
     )  # noqa: E501
+
+
+def test_validate_trust_vector(sample_trust_vector):
+    # Should not raise an error
+    sample_trust_vector.validate()
+
+
+def test_validate_trust_vector_invalid():
+    with pytest.raises(EARValidationError):
+        invalid_vector = TrustVector(
+            configuration=TrustClaim(value=200, tag="invalid", short="", long="")
+        )
+        invalid_vector.validate()

@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict
 
 from src.base import BaseJCSerializable
+from src.errors import EARValidationError
 from src.trust_tier import to_trust_tier
 from src.trust_vector import TrustVector
 from src.verifier_id import VerifierID
@@ -89,3 +90,29 @@ class AttestationResult(BaseJCSerializable):
                 for key, value in data.get(cls.jc_map["submods"], {}).items()
             },
         )
+
+    def validate(self):
+        # Validates an AttestationResult object
+        if not isinstance(self.profile, str) or not self.profile:
+            raise EARValidationError(
+                "AttestationResult profile must be a non-empty string"
+            )
+        if not isinstance(self.issued_at, int) or self.issued_at <= 0:
+            raise EARValidationError(
+                "AttestationResult issued_at must be a positive integer"
+            )
+
+        self.verifier_id.validate()
+
+        for submod, details in self.submods.items():
+            if (
+                not isinstance(details, Dict)
+                or "trust_vector" not in details
+                or "status" not in details
+            ):
+                raise EARValidationError(
+                    f"Submodule {submod} must contain a valid trust_vector and status"
+                )
+
+            trust_vector = details["trust_vector"]
+            trust_vector.validate()

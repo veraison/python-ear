@@ -56,3 +56,10 @@ class TrustVector(BaseJCSerializable):
             if index in reverse_map
         }
         return cls(**kwargs)
+
+    def validate(self):
+        # Validates a TrustVector object
+
+        for claim in self.__dict__.values():
+            if claim is not None:
+                claim.validate()

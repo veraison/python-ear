@@ -1,6 +1,8 @@
 from dataclasses import asdict, dataclass
 from typing import Any, Dict
 
+from src.errors import EARValidationError
+
 
 # https://www.ietf.org/archive/id/draft-ietf-rats-ar4si-08.html#section-2.3
 @dataclass
@@ -12,6 +14,20 @@ class TrustClaim:
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
+
+    def validate(self):
+        # Validates a TrustClaim object
+        if not isinstance(self.value, int) or not -128 <= self.value <= 127:
+            raise EARValidationError(
+                f"""Invalid value in TrustClaim: {self.value}.
+                Must be in range [-128, 127]"""
+            )
+        if not isinstance(self.tag, str):
+            raise EARValidationError("TrustClaim tag must be a string")
+        if not isinstance(self.short, str):
+            raise EARValidationError("TrustClaim short description must be a string")
+        if not isinstance(self.long, str):
+            raise EARValidationError("TrustClaim long description must be a string")
 
 
 # General
