@@ -32,12 +32,12 @@ class TrustVector(BaseJCSerializable):
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
-    def to_cbor(self) -> Dict[int, Dict[str, Any]]:
-        return {
-            index: getattr(self, field).to_dict()
-            for field, index in self.jc_map.items()
-            if getattr(self, field)
-        }
+    # def to_cbor(self) -> Dict[int, Dict[str, Any]]:
+    #     return {
+    #         index: getattr(self, field).to_dict()
+    #         for field, index in self.jc_map.items()
+    #         if getattr(self, field)
+    #     }
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]):
@@ -47,15 +47,15 @@ class TrustVector(BaseJCSerializable):
         }
         return cls(**kwargs)
 
-    @classmethod
-    def from_cbor(cls, data: Dict[int, Dict[str, Any]]):
-        reverse_map = {v: k for k, v in cls.jc_map.items()}
-        kwargs = {
-            reverse_map[index]: TrustClaim(**value)
-            for index, value in data.items()
-            if index in reverse_map
-        }
-        return cls(**kwargs)
+    # @classmethod
+    # def from_cbor(cls, data: Dict[int, Dict[str, Any]]):
+    #     reverse_map = {v: k for k, v in cls.jc_map.items()}
+    #     kwargs = {
+    #         reverse_map[index]: TrustClaim(**value)
+    #         for index, value in data.items()
+    #         if index in reverse_map
+    #     }
+    #     return cls(**kwargs)
 
     def validate(self):
         # Validates a TrustVector object

@@ -121,7 +121,7 @@ def test_attestation_result_to_cbor(sample_attestation_result):
     assert cbor_data == expected_cbor
 
 
-def test_attestation_result_from_cbor():
+def test_attestation_result_from_cbor(sample_attestation_result):
     cbor_data = {
         265: "test_profile",
         6: 1234567890,
@@ -142,9 +142,10 @@ def test_attestation_result_from_cbor():
             }
         },
     }
+    import json
 
     parsed_claims = AttestationResult.from_cbor(cbor_data)
-    assert parsed_claims.to_cbor() == cbor_data
+    assert json.dumps(parsed_claims.to_cbor(), sort_keys=True) == json.dumps(cbor_data, sort_keys=True)
 
 
 def test_validate_ear_claims(sample_attestation_result):

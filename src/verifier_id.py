@@ -19,10 +19,10 @@ class VerifierID(BaseJCSerializable):
         return asdict(self)
 
     # Convert to a dict with integer keys (for CBOR)
-    def to_cbor(self) -> Dict[int, str]:
-        return {
-            index: getattr(self, field) for field, index in self.jc_map.items()
-        }  # noqa: E501
+    # def to_cbor(self) -> Dict[int, str]:
+    #     return {
+    #         index: getattr(self, field) for field, index in self.jc_map.items()
+    #     }  # noqa: E501
 
     # Create an instance from a dict with string keys
     @classmethod
@@ -30,11 +30,11 @@ class VerifierID(BaseJCSerializable):
         return cls(**data)
 
     # Create an instance from a CBOR-like dict (integer keys)
-    @classmethod
-    def from_cbor(cls, data: Dict[int, str]):
-        reverse_map = {v: k for k, v in cls.jc_map.items()}
-        kwargs = {reverse_map[index]: value for index, value in data.items()}
-        return cls(**kwargs)
+    # @classmethod
+    # def from_cbor(cls, data: Dict[int, str]):
+    #     reverse_map = {v: k for k, v in cls.jc_map.items()}
+    #     kwargs = {reverse_map[index]: value for index, value in data.items()}
+    #     return cls(**kwargs)
 
     def validate(self):
         # Validates a VerifierID object
