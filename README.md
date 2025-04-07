@@ -1,12 +1,16 @@
-# **python-ear**
+# python-ear
 
-A Python library that implements the EAT Attestation Result (EAR) data format, as specified in [draft-fv-rats-ear](https://datatracker.ietf.org/doc/draft-fv-rats-ear/). This library provides implementations for both CBOR-based and JSON-based serialisations.
+A Python library that implements the EAT Attestation Result (EAR) data format, as specified in [draft-ietf-rats-ear](https://datatracker.ietf.org/doc/draft-ietf-rats-ear/).
+
+This library provides implementations for both CBOR-based and JSON-based serialisations.
 
 ---
 
-## **Overview**
+## Overview
 
-The goal of this project is to standardize attestation results by defining a shared information and data model, enabling seamless integration with other components of the RATS architecture. This focuses specifically on harmonizing attestation results to facilitate interoperability between various verifiers and relying parties.
+The goal of this project is to standardize attestation results by defining a shared information and data model, enabling seamless integration with other components of the RATS architecture.
+
+This focuses specifically on harmonizing attestation results to facilitate interoperability between various verifiers and relying parties.
 
 This implementation was initiated as part of the **Veraison Mentorship** under the Linux Foundation Mentorship Program (**LFX Mentorship**), focusing on the following capabilities:
 
@@ -22,10 +26,10 @@ This library is developed in Python and makes use of existing packages for CWT a
 
 ---
 
-## **Key Features**
+## Key Features
 
 1. **Standards Compliance:**  
-   Implements draft-fv-rats-ear as per IETF specifications to ensure compatibility with the RATS architecture.
+   Implements draft-ietf-rats-ear as per IETF specifications to ensure compatibility with the RATS architecture.
 
 2. **Token Management:**  
    - **CWT Support:** Utilizes [python-cwt](https://python-cwt.readthedocs.io/en/stable/) for handling CBOR Web Tokens.  
@@ -44,25 +48,25 @@ This library is developed in Python and makes use of existing packages for CWT a
 
 ---
 
-## **Technical Stack**
+## Technical Stack
 
-### **Token Creation and Management**
+### Token Creation and Management
 
 - **CWT:** [python-cwt](https://python-cwt.readthedocs.io/en/stable/)  
 - **JWT:** [python-jose](https://pypi.org/project/python-jose/)
 
-### **Code Formatting and Styling**
+### Code Formatting and Styling
 
 - **black:** Ensures consistent code formatting.  
 - **isort:** Manages import statements.  
 
-### **Linting and Static Analysis**
+### Linting and Static Analysis
 
 - **flake8:** For PEP 8 compliance and linting.  
 - **mypy:** Static type checking.  
 - **pyright:** Advanced type checking for Python.  
 - **pylint:** Code analysis for error detection and enforcing coding standards.  
 
-### **Testing**
+### Testing
 
 - **pytest:** Framework for writing and executing tests.
