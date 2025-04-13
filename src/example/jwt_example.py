@@ -2,6 +2,7 @@ from datetime import datetime
 
 from src.claims import AttestationResult
 from src.jwt_config import generate_secret_key
+from src.submod import Submod
 from src.trust_claims import TRUSTWORTHY_INSTANCE_CLAIM, UNRECOGNIZED_INSTANCE_CLAIM
 from src.trust_tier import TRUST_TIER_AFFIRMING, TRUST_TIER_CONTRAINDICATED
 from src.trust_vector import TrustVector
@@ -18,14 +19,14 @@ attestation_result = AttestationResult(
     issued_at=int(datetime.timestamp(datetime.now())),
     verifier_id=VerifierID(developer="Acme Inc.", build="v1"),
     submods={
-        "submod1": {
-            "trust_vector": TrustVector(instance_identity=UNRECOGNIZED_INSTANCE_CLAIM),
-            "status": TRUST_TIER_AFFIRMING,
-        },
-        "submod2": {
-            "trust_vector": TrustVector(instance_identity=TRUSTWORTHY_INSTANCE_CLAIM),
-            "status": TRUST_TIER_CONTRAINDICATED,
-        },
+        "submod1": Submod(
+            trust_vector=TrustVector(instance_identity=UNRECOGNIZED_INSTANCE_CLAIM),
+            status=TRUST_TIER_AFFIRMING,
+        ),
+        "submod2": Submod(
+            trust_vector=TrustVector(instance_identity=TRUSTWORTHY_INSTANCE_CLAIM),
+            status=TRUST_TIER_CONTRAINDICATED,
+        ),
     },
 )
 

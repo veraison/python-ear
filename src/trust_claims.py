@@ -7,7 +7,8 @@ from src.errors import EARValidationError
 # https://www.ietf.org/archive/id/draft-ietf-rats-ar4si-08.html#section-2.3
 @dataclass
 class TrustClaim:
-    value: int  # must be in range -128 to 127
+    # every trustclaim will be transported in form of its value only
+    value: int  # must be in range -128 to 127,
     tag: str = ""
     short: str = ""
     long: str = ""
@@ -30,6 +31,7 @@ class TrustClaim:
             raise EARValidationError("TrustClaim long description must be a string")
 
 
+# Mapping value to TrustClaim types
 # General
 VERIFIER_MALFUNCTION_CLAIM = TrustClaim(
     value=-1,

@@ -33,14 +33,14 @@ def sample_trust_vector():
 
 def test_trust_vector_to_dict(sample_trust_vector):
     expected = {
-        "instance_identity": TRUSTWORTHY_INSTANCE_CLAIM.to_dict(),
-        "configuration": UNSAFE_CONFIG_CLAIM.to_dict(),
-        "executables": APPROVED_RUNTIME_CLAIM.to_dict(),
-        "file_system": APPROVED_FILES_CLAIM.to_dict(),
-        "hardware": GENUINE_HARDWARE_CLAIM.to_dict(),
-        "runtime_opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.to_dict(),
-        "storage_opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.to_dict(),
-        "sourced_data": TRUSTED_SOURCES_CLAIM.to_dict(),
+        "instance_identity": TRUSTWORTHY_INSTANCE_CLAIM.value,
+        "configuration": UNSAFE_CONFIG_CLAIM.value,
+        "executables": APPROVED_RUNTIME_CLAIM.value,
+        "file_system": APPROVED_FILES_CLAIM.value,
+        "hardware": GENUINE_HARDWARE_CLAIM.value,
+        "runtime_opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
+        "storage_opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
+        "sourced_data": TRUSTED_SOURCES_CLAIM.value,
     }
     assert sample_trust_vector.to_dict() == expected
 
@@ -51,37 +51,37 @@ def test_trust_vector_to_json(sample_trust_vector):
     assert parsed_vector.to_dict() == sample_trust_vector.to_dict()
 
 
-def test_trust_vector_to_cbor(sample_trust_vector):
+def test_trust_vector_to_int_keys(sample_trust_vector):
     expected = {
-        0: TRUSTWORTHY_INSTANCE_CLAIM.to_dict(),
-        1: UNSAFE_CONFIG_CLAIM.to_dict(),
-        2: APPROVED_RUNTIME_CLAIM.to_dict(),
-        3: APPROVED_FILES_CLAIM.to_dict(),
-        4: GENUINE_HARDWARE_CLAIM.to_dict(),
-        5: ENCRYPTED_MEMORY_RUNTIME_CLAIM.to_dict(),
-        6: HW_KEYS_ENCRYPTED_SECRETS_CLAIM.to_dict(),
-        7: TRUSTED_SOURCES_CLAIM.to_dict(),
+        0: TRUSTWORTHY_INSTANCE_CLAIM.value,
+        1: UNSAFE_CONFIG_CLAIM.value,
+        2: APPROVED_RUNTIME_CLAIM.value,
+        3: APPROVED_FILES_CLAIM.value,
+        4: GENUINE_HARDWARE_CLAIM.value,
+        5: ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
+        6: HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
+        7: TRUSTED_SOURCES_CLAIM.value,
     }
-    assert sample_trust_vector.to_cbor() == expected
+    assert sample_trust_vector.to_int_keys() == expected
 
 
 def test_trust_vector_from_dict():
     data = {
-        "instance_identity": TRUSTWORTHY_INSTANCE_CLAIM.to_dict(),
-        "configuration": UNSAFE_CONFIG_CLAIM.to_dict(),
-        "executables": APPROVED_RUNTIME_CLAIM.to_dict(),
-        "file_system": APPROVED_FILES_CLAIM.to_dict(),
-        "hardware": GENUINE_HARDWARE_CLAIM.to_dict(),
-        "runtime_opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.to_dict(),
-        "storage_opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.to_dict(),
-        "sourced_data": TRUSTED_SOURCES_CLAIM.to_dict(),
+        "instance_identity": TRUSTWORTHY_INSTANCE_CLAIM.value,
+        "configuration": UNSAFE_CONFIG_CLAIM.value,
+        "executables": APPROVED_RUNTIME_CLAIM.value,
+        "file_system": APPROVED_FILES_CLAIM.value,
+        "hardware": GENUINE_HARDWARE_CLAIM.value,
+        "runtime_opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
+        "storage_opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
+        "sourced_data": TRUSTED_SOURCES_CLAIM.value,
     }
     parsed_vector = TrustVector.from_dict(data)
     assert parsed_vector.to_dict() == data
 
 
-def test_trust_vector_from_cbor():
-    cbor_data = {
+def test_trust_vector_from_int_keys():
+    int_keys_data = {
         0: TRUSTWORTHY_INSTANCE_CLAIM.to_dict(),
         1: UNSAFE_CONFIG_CLAIM.to_dict(),
         2: APPROVED_RUNTIME_CLAIM.to_dict(),
@@ -91,9 +91,9 @@ def test_trust_vector_from_cbor():
         6: HW_KEYS_ENCRYPTED_SECRETS_CLAIM.to_dict(),
         7: TRUSTED_SOURCES_CLAIM.to_dict(),
     }
-    parsed_vector = TrustVector.from_cbor(cbor_data)
+    parsed_vector = TrustVector.from_int_keys(int_keys_data)
     assert (
-        parsed_vector.to_dict() == TrustVector.from_cbor(cbor_data).to_dict()
+        parsed_vector.to_dict() == TrustVector.from_int_keys(int_keys_data).to_dict()
     )  # noqa: E501
 
 

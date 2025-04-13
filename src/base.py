@@ -1,109 +1,97 @@
-from abc import ABC, abstractmethod
-from typing import Any, Dict, Type, TypeVar, get_type_hints
 import json
+from abc import ABC
+from typing import Any, ClassVar, Dict, Tuple, Type, TypeVar, Union, get_args
 
 T = TypeVar("T", bound="BaseJCSerializable")
 
+
+def to_data(value: Any, keys_as_int=False) -> Any:
+    if hasattr(value, "to_data"):
+        return value.to_data(keys_as_int)
+    if hasattr(value, "items"):  # dict-like
+        return {
+            to_data(k, keys_as_int): to_data(v, keys_as_int) for k, v in value.items()
+        }
+    if hasattr(value, "__iter__") and not isinstance(value, str):  # list-like
+        return [to_data(v, keys_as_int) for v in value]
+
+    if hasattr(
+        value, "value"
+    ):  # custom classes that have value attr but don't have 'to_data'
+        return value.value  # type: ignore[attr-defined]
+    # scalar and no to_data(), so assume serializable as-is
+    return value
+
+
 class BaseJCSerializable(ABC):
-    jc_map: Dict[str, int]
+    jc_map: ClassVar[Dict[str, Tuple[int, str]]]
+
+    def to_data(self, keys_as_int=False) -> Dict[Union[str, int], Any]:
+        return {
+            (int_key if keys_as_int else str_key): to_data(
+                getattr(self, attr), keys_as_int
+            )
+            for attr, (int_key, str_key) in self.jc_map.items()
+        }
+
+    @classmethod
+    def from_data(cls: Type[T], data: dict, keys_as_int=False) -> T:
+
+        if keys_as_int:
+            index = 0
+        else:
+            index = 1
+        init_kwargs = {}
+        reverse_map = {v[index]: k for k, v in cls.jc_map.items()}
+        for key, value in data.items():
+            if key not in reverse_map:
+                continue
+
+            attr = reverse_map[key]
+            field_type = getattr(cls, "__annotations__", {}).get(attr)
+            if field_type is None:
+                continue
+
+            args = get_args(field_type)
+
+            if hasattr(field_type, "from_data"):
+                # Direct object
+                init_kwargs[attr] = field_type.from_data(value, keys_as_int=keys_as_int)
+
+            elif hasattr(field_type, "items") and hasattr(args[1], "from_data"):
+                # Dict[str | int, CustomClass]
+                init_kwargs[attr] = {
+                    k: args[1].from_data(v, keys_as_int=keys_as_int)
+                    for k, v in value.items()
+                }
+
+            elif args:
+                # custom classes that dont have 'from_data'
+                init_kwargs[attr] = args[0](value)
+
+            else:
+                init_kwargs[attr] = field_type(value)
+
+        return cls(**init_kwargs)
 
     def to_dict(self) -> Dict[str, Any]:
-        raise NotImplementedError("to_dict must be implemented in subclasses.")
+        # default str_keys
+        return self.to_data()  # type: ignore[return-value] # pyright: ignore[reportGeneralTypeIssues] # noqa: E501 # pylint: disable=line-too-long
 
-    def to_json(self) -> str:
-        return json.dumps(self.to_dict())
-
-    def to_cbor(self) -> Dict[int, Any]:
-        cbor_data = {}
-        for attr, cbor_key in self.jc_map.items():
-            if "." in attr:  # skiped nested keys, cuz, they will be processed when we go inside submods(not a nested key as in jc_map)
-                continue
-            value = getattr(self, attr, None)
-            if isinstance(value, BaseJCSerializable): # trust_vector and status will be processed here
-                cbor_data[cbor_key] = value.to_cbor()
-            elif isinstance(value, dict): # submods will be processed here
-                nested = {}
-                for k, v in value.items():
-                    nested[k] = self._serialize_nested_dict(attr, v)
-                cbor_data[cbor_key] = nested
-            elif hasattr(value, "to_dict"): # for trust_claim
-                cbor_data[cbor_key] = value.to_dict()
-            else:
-                cbor_data[cbor_key] = value
-        return cbor_data
-
-    def _serialize_nested_dict(self, prefix: str, d: dict) -> dict:
-        out = {}
-        for subkey, val in d.items():
-            if hasattr(val, "to_cbor"):
-                out[self.jc_map[f"{prefix}.{subkey}"]] = val.to_cbor()
-            elif hasattr(val, "value"): # status with trust_tier
-                out[self.jc_map[f"{prefix}.{subkey}"]] = val.value
-            else:
-                out[self.jc_map.get(f"{prefix}.{subkey}", subkey)] = val
-        return out
+    def to_int_keys(self) -> Dict[Union[str, int], Any]:
+        return self.to_data(keys_as_int=True)
 
     @classmethod
     def from_dict(cls: Type[T], data: Dict[str, Any]) -> T:
-        raise NotImplementedError("from_dict must be implemented in subclasses.")
+        return cls.from_data(data)
 
     @classmethod
-    def from_cbor(cls: Type[T], data: Dict[int, Any]) -> T:
-        kwargs = {}
-        reverse_map = {v: k for k, v in cls.jc_map.items()}
-        type_hints = get_type_hints(cls)
-
-        for key, val in data.items():
-            attr = reverse_map.get(key)
-            if attr is None or "." in attr:
-                continue
-
-            hint = type_hints.get(attr)
-
-            # Handle BaseJCSerializable directly
-            if isinstance(val, dict) and hasattr(hint, "from_cbor"):
-                kwargs[attr] = hint.from_cbor(val)
-
-            # Handle Dict[str, BaseJCSerializable] or Dict[str, Any] with nested mapping
-            elif isinstance(val, dict) and isinstance(hint, type) and issubclass(hint, dict):
-                sub_hint = None
-                if hasattr(hint, "__args__") and len(hint.__args__) > 1:
-                    sub_hint = hint.__args__[1]
-                kwargs[attr] = {
-                    k: cls._deserialize_nested_dict(attr, v, sub_hint=sub_hint)
-                    for k, v in val.items()
-                }
-
-            else:
-                kwargs[attr] = val
-
-        return cls(**kwargs)
+    def from_int_keys(cls: Type[T], data: Dict[int, Any]) -> T:
+        return cls.from_data(data, keys_as_int=True)
 
     @classmethod
-    def _deserialize_nested_dict(cls, prefix: str, d: dict, sub_hint=None) -> dict:
-        out = {}
+    def from_json(cls, json_str: str):
+        return cls.from_dict(json.loads(json_str))
 
-        # If sub_hint isn't given, try to get it from type hints
-        if sub_hint is None:
-            type_hints = get_type_hints(cls)
-            hint = type_hints.get(prefix)
-            if hasattr(hint, '__args__') and len(hint.__args__) > 1:
-                sub_hint = hint.__args__[1]
-
-        for map_key, jc_key in cls.jc_map.items():
-            if not map_key.startswith(f"{prefix}."):
-                continue
-
-            field_name = map_key.split(".")[-1]
-            if jc_key in d:
-                val = d[jc_key]
-
-                # Handle BaseJCSerializable subclasses inside subdict
-                if hasattr(sub_hint, 'from_cbor') and isinstance(val, dict):
-                    out[field_name] = sub_hint.from_cbor(val)
-                elif callable(sub_hint):
-                    out[field_name] = sub_hint(val)
-                else:
-                    out[field_name] = val
-
-        return out
+    def to_json(self):
+        return json.dumps(self.to_data())

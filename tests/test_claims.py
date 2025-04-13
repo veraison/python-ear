@@ -1,7 +1,10 @@
+import json
+
 import pytest
 
 from src.claims import AttestationResult
 from src.errors import EARValidationError
+from src.submod import Submod
 from src.trust_claims import (
     APPROVED_CONFIG_CLAIM,
     APPROVED_FILES_CLAIM,
@@ -11,6 +14,7 @@ from src.trust_claims import (
     HW_KEYS_ENCRYPTED_SECRETS_CLAIM,
     TRUSTED_SOURCES_CLAIM,
     TRUSTWORTHY_INSTANCE_CLAIM,
+    TrustClaim,
 )
 from src.trust_tier import TRUST_TIER_AFFIRMING
 from src.trust_vector import TrustVector
@@ -24,39 +28,39 @@ def sample_attestation_result():
         issued_at=1234567890,
         verifier_id=VerifierID(developer="Acme Inc.", build="v1"),
         submods={
-            "submod1": {
-                "trust_vector": TrustVector(
-                    instance_identity=TRUSTWORTHY_INSTANCE_CLAIM,
-                    configuration=APPROVED_CONFIG_CLAIM,
-                    executables=APPROVED_RUNTIME_CLAIM,
-                    file_system=APPROVED_FILES_CLAIM,
-                    hardware=GENUINE_HARDWARE_CLAIM,
-                    runtime_opaque=ENCRYPTED_MEMORY_RUNTIME_CLAIM,
-                    storage_opaque=HW_KEYS_ENCRYPTED_SECRETS_CLAIM,
-                    sourced_data=TRUSTED_SOURCES_CLAIM,
+            "submod1": Submod(
+                trust_vector=TrustVector(
+                    instance_identity=TrustClaim(2),
+                    configuration=TrustClaim(2),
+                    executables=TrustClaim(2),
+                    file_system=TrustClaim(2),
+                    hardware=TrustClaim(2),
+                    runtime_opaque=TrustClaim(2),
+                    storage_opaque=TrustClaim(2),
+                    sourced_data=TrustClaim(2),
                 ),
-                "status": TRUST_TIER_AFFIRMING,
-            }
+                status=TRUST_TIER_AFFIRMING,
+            ),
         },
     )
 
 
 def test_attestation_result_to_dict(sample_attestation_result):
     expected = {
-        "eat_profile": "test_profile",
-        "iat": 1234567890,
-        "ear.verifier-id": {"developer": "Acme Inc.", "build": "v1"},
+        "profile": "test_profile",
+        "issued_at": 1234567890,
+        "verifier_id": {"developer": "Acme Inc.", "build": "v1"},
         "submods": {
             "submod1": {
                 "trust_vector": {
-                    "instance_identity": TRUSTWORTHY_INSTANCE_CLAIM.to_dict(),
-                    "configuration": APPROVED_CONFIG_CLAIM.to_dict(),
-                    "executables": APPROVED_RUNTIME_CLAIM.to_dict(),
-                    "file_system": APPROVED_FILES_CLAIM.to_dict(),
-                    "hardware": GENUINE_HARDWARE_CLAIM.to_dict(),
-                    "runtime_opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.to_dict(),
-                    "storage_opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.to_dict(),
-                    "sourced_data": TRUSTED_SOURCES_CLAIM.to_dict(),
+                    "instance_identity": TRUSTWORTHY_INSTANCE_CLAIM.value,
+                    "configuration": APPROVED_CONFIG_CLAIM.value,
+                    "executables": APPROVED_RUNTIME_CLAIM.value,
+                    "file_system": APPROVED_FILES_CLAIM.value,
+                    "hardware": GENUINE_HARDWARE_CLAIM.value,
+                    "runtime_opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
+                    "storage_opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
+                    "sourced_data": TRUSTED_SOURCES_CLAIM.value,
                 },
                 "status": TRUST_TIER_AFFIRMING.value,
             }
@@ -67,26 +71,26 @@ def test_attestation_result_to_dict(sample_attestation_result):
 
 def test_attestation_result_to_json(sample_attestation_result):
     json_str = sample_attestation_result.to_json()
-    parsed_claims = AttestationResult.from_json(json_str)
+    parsed_claims = AttestationResult.from_json(json_str=json_str)
     assert parsed_claims.to_dict() == sample_attestation_result.to_dict()
 
 
 def test_attestation_result_from_dict():
     data = {
-        "eat_profile": "test_profile",
-        "iat": 1234567890,
-        "ear.verifier-id": {"developer": "Acme Inc.", "build": "v1"},
+        "profile": "test_profile",
+        "issued_at": 1234567890,
+        "verifier_id": {"developer": "Acme Inc.", "build": "v1"},
         "submods": {
             "submod1": {
                 "trust_vector": {
-                    "instance_identity": TRUSTWORTHY_INSTANCE_CLAIM.to_dict(),
-                    "configuration": APPROVED_CONFIG_CLAIM.to_dict(),
-                    "executables": APPROVED_RUNTIME_CLAIM.to_dict(),
-                    "file_system": APPROVED_FILES_CLAIM.to_dict(),
-                    "hardware": GENUINE_HARDWARE_CLAIM.to_dict(),
-                    "runtime_opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.to_dict(),
-                    "storage_opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.to_dict(),
-                    "sourced_data": TRUSTED_SOURCES_CLAIM.to_dict(),
+                    "instance_identity": TRUSTWORTHY_INSTANCE_CLAIM.value,
+                    "configuration": APPROVED_CONFIG_CLAIM.value,
+                    "executables": APPROVED_RUNTIME_CLAIM.value,
+                    "file_system": APPROVED_FILES_CLAIM.value,
+                    "hardware": GENUINE_HARDWARE_CLAIM.value,
+                    "runtime_opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
+                    "storage_opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
+                    "sourced_data": TRUSTED_SOURCES_CLAIM.value,
                 },
                 "status": TRUST_TIER_AFFIRMING.value,
             }
@@ -96,56 +100,57 @@ def test_attestation_result_from_dict():
     assert parsed_claims.to_dict() == data
 
 
-def test_attestation_result_to_cbor(sample_attestation_result):
-    cbor_data = sample_attestation_result.to_cbor()
-    expected_cbor = {
+def test_attestation_result_to_int_keys(sample_attestation_result):
+    int_keys_data = sample_attestation_result.to_int_keys()
+    expected_int_keys = {
         265: "test_profile",
         6: 1234567890,
         1004: {0: "Acme Inc.", 1: "v1"},
         266: {
             "submod1": {
                 1001: {
-                    0: TRUSTWORTHY_INSTANCE_CLAIM.to_dict(),
-                    1: APPROVED_CONFIG_CLAIM.to_dict(),
-                    2: APPROVED_RUNTIME_CLAIM.to_dict(),
-                    3: APPROVED_FILES_CLAIM.to_dict(),
-                    4: GENUINE_HARDWARE_CLAIM.to_dict(),
-                    5: ENCRYPTED_MEMORY_RUNTIME_CLAIM.to_dict(),
-                    6: HW_KEYS_ENCRYPTED_SECRETS_CLAIM.to_dict(),
-                    7: TRUSTED_SOURCES_CLAIM.to_dict(),
+                    0: TRUSTWORTHY_INSTANCE_CLAIM.value,
+                    1: APPROVED_CONFIG_CLAIM.value,
+                    2: APPROVED_RUNTIME_CLAIM.value,
+                    3: APPROVED_FILES_CLAIM.value,
+                    4: GENUINE_HARDWARE_CLAIM.value,
+                    5: ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
+                    6: HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
+                    7: TRUSTED_SOURCES_CLAIM.value,
                 },
                 1000: TRUST_TIER_AFFIRMING.value,
             }
         },
     }
-    assert cbor_data == expected_cbor
+    assert int_keys_data == expected_int_keys
 
 
-def test_attestation_result_from_cbor(sample_attestation_result):
-    cbor_data = {
+def test_attestation_result_from_int_keys():
+    int_keys_data = {
         265: "test_profile",
         6: 1234567890,
         1004: {0: "Acme Inc.", 1: "v1"},
         266: {
             "submod1": {
                 1001: {
-                    0: TRUSTWORTHY_INSTANCE_CLAIM.to_dict(),
-                    1: APPROVED_CONFIG_CLAIM.to_dict(),
-                    2: APPROVED_RUNTIME_CLAIM.to_dict(),
-                    3: APPROVED_FILES_CLAIM.to_dict(),
-                    4: GENUINE_HARDWARE_CLAIM.to_dict(),
-                    5: ENCRYPTED_MEMORY_RUNTIME_CLAIM.to_dict(),
-                    6: HW_KEYS_ENCRYPTED_SECRETS_CLAIM.to_dict(),
-                    7: TRUSTED_SOURCES_CLAIM.to_dict(),
+                    0: TRUSTWORTHY_INSTANCE_CLAIM.value,
+                    1: APPROVED_CONFIG_CLAIM.value,
+                    2: APPROVED_RUNTIME_CLAIM.value,
+                    3: APPROVED_FILES_CLAIM.value,
+                    4: GENUINE_HARDWARE_CLAIM.value,
+                    5: ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
+                    6: HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
+                    7: TRUSTED_SOURCES_CLAIM.value,
                 },
                 1000: TRUST_TIER_AFFIRMING.value,
             }
         },
     }
-    import json
 
-    parsed_claims = AttestationResult.from_cbor(cbor_data)
-    assert json.dumps(parsed_claims.to_cbor(), sort_keys=True) == json.dumps(cbor_data, sort_keys=True)
+    parsed_claims = AttestationResult.from_int_keys(int_keys_data)
+    assert json.dumps(parsed_claims.to_int_keys(), sort_keys=True) == json.dumps(
+        int_keys_data, sort_keys=True
+    )
 
 
 def test_validate_ear_claims(sample_attestation_result):

@@ -22,9 +22,9 @@ def test_to_json(verifier):  # pylint: disable=redefined-outer-name
     assert verifier.to_json() == expected
 
 
-def test_to_cbor(verifier):  # pylint: disable=redefined-outer-name
+def test_to_int_keys(verifier):  # pylint: disable=redefined-outer-name
     expected = {0: "Acme Inc.", 1: "v1.0.0"}
-    assert verifier.to_cbor() == expected
+    assert verifier.to_int_keys() == expected
 
 
 def test_from_dict():
@@ -34,9 +34,9 @@ def test_from_dict():
     assert sample_verifier.build == "v1.0.0"
 
 
-def test_from_cbor():
-    cbor_data = {0: "Acme Inc.", 1: "v1.0.0"}
-    sample_verifier = VerifierID.from_cbor(cbor_data)
+def test_from_int_keys():
+    int_keys_data = {0: "Acme Inc.", 1: "v1.0.0"}
+    sample_verifier = VerifierID.from_int_keys(int_keys_data)
     assert sample_verifier.developer == "Acme Inc."
     assert sample_verifier.build == "v1.0.0"
 

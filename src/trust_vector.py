@@ -1,5 +1,5 @@
-from dataclasses import asdict, dataclass
-from typing import Any, Dict, Optional
+from dataclasses import dataclass
+from typing import Optional
 
 from src.base import BaseJCSerializable
 from src.trust_claims import TrustClaim
@@ -19,43 +19,15 @@ class TrustVector(BaseJCSerializable):
     sourced_data: Optional[TrustClaim] = None
 
     jc_map = {
-        "instance_identity": 0,
-        "configuration": 1,
-        "executables": 2,
-        "file_system": 3,
-        "hardware": 4,
-        "runtime_opaque": 5,
-        "storage_opaque": 6,
-        "sourced_data": 7,
+        "instance_identity": (0, "instance_identity"),
+        "configuration": (1, "configuration"),
+        "executables": (2, "executables"),
+        "file_system": (3, "file_system"),
+        "hardware": (4, "hardware"),
+        "runtime_opaque": (5, "runtime_opaque"),
+        "storage_opaque": (6, "storage_opaque"),
+        "sourced_data": (7, "sourced_data"),
     }
-
-    def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
-
-    # def to_cbor(self) -> Dict[int, Dict[str, Any]]:
-    #     return {
-    #         index: getattr(self, field).to_dict()
-    #         for field, index in self.jc_map.items()
-    #         if getattr(self, field)
-    #     }
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]):
-        kwargs = {
-            field: TrustClaim(**data[field]) if data.get(field) else None
-            for field in cls.jc_map
-        }
-        return cls(**kwargs)
-
-    # @classmethod
-    # def from_cbor(cls, data: Dict[int, Dict[str, Any]]):
-    #     reverse_map = {v: k for k, v in cls.jc_map.items()}
-    #     kwargs = {
-    #         reverse_map[index]: TrustClaim(**value)
-    #         for index, value in data.items()
-    #         if index in reverse_map
-    #     }
-    #     return cls(**kwargs)
 
     def validate(self):
         # Validates a TrustVector object
