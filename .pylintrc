@@ -1,8 +1,9 @@
 [MESSAGES CONTROL]
-disable = C0114, C0115, C0116  ; Disable missing module/class/function docstring warnings
+disable = C0114, C0115, C0116, redefined-outer-name, duplicate-code
 
 [FORMAT]
 max-line-length = 88  ; Match Black's default line length
+max-attributes=10
 
 [MASTER]
 ignore = venv  ; Ignore virtual environment folder
