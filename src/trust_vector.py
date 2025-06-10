@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from src.base import BaseJCSerializable
+from src.base import BaseJCSerializable, KeyMapping
 from src.trust_claims import TrustClaim
 
 
@@ -19,14 +19,14 @@ class TrustVector(BaseJCSerializable):
     sourced_data: Optional[TrustClaim] = None
 
     jc_map = {
-        "instance_identity": (0, "instance_identity"),
-        "configuration": (1, "configuration"),
-        "executables": (2, "executables"),
-        "file_system": (3, "file_system"),
-        "hardware": (4, "hardware"),
-        "runtime_opaque": (5, "runtime_opaque"),
-        "storage_opaque": (6, "storage_opaque"),
-        "sourced_data": (7, "sourced_data"),
+        "instance_identity": KeyMapping(0, "instance_identity"),
+        "configuration": KeyMapping(1, "configuration"),
+        "executables": KeyMapping(2, "executables"),
+        "file_system": KeyMapping(3, "file_system"),
+        "hardware": KeyMapping(4, "hardware"),
+        "runtime_opaque": KeyMapping(5, "runtime_opaque"),
+        "storage_opaque": KeyMapping(6, "storage_opaque"),
+        "sourced_data": KeyMapping(7, "sourced_data"),
     }
 
     def validate(self):

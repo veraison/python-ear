@@ -4,7 +4,7 @@ from typing import Dict
 
 from jose import jwt  # type: ignore # pylint: disable=import-error
 
-from src.base import BaseJCSerializable
+from src.base import BaseJCSerializable, KeyMapping
 from src.errors import EARValidationError
 from src.jwt_config import DEFAULT_ALGORITHM, DEFAULT_EXPIRATION_MINUTES
 from src.submod import Submod
@@ -21,10 +21,10 @@ class AttestationResult(BaseJCSerializable):
 
     # https://www.ietf.org/archive/id/draft-ietf-rats-eat-31.html#section-7.2.4
     jc_map = {
-        "profile": (265, "profile"),
-        "issued_at": (6, "issued_at"),
-        "verifier_id": (1004, "verifier_id"),
-        "submods": (266, "submods"),
+        "profile": KeyMapping(265, "profile"),
+        "issued_at": KeyMapping(6, "issued_at"),
+        "verifier_id": KeyMapping(1004, "verifier_id"),
+        "submods": KeyMapping(266, "submods"),
     }
 
     def validate(self):

@@ -1,8 +1,11 @@
 import json
 from abc import ABC
+from collections import namedtuple
 from typing import Any, ClassVar, Dict, Tuple, Type, TypeVar, Union, get_args
 
 T = TypeVar("T", bound="BaseJCSerializable")
+
+KeyMapping = namedtuple("KeyMapping", ["int_key", "str_key"])
 
 
 def to_data(value: Any, keys_as_int=False) -> Any:
@@ -36,13 +39,12 @@ class BaseJCSerializable(ABC):
 
     @classmethod
     def from_data(cls: Type[T], data: dict, keys_as_int=False) -> T:
-
-        if keys_as_int:
-            index = 0
-        else:
-            index = 1
+        key_attr = "int_key" if keys_as_int else "str_key"
         init_kwargs = {}
-        reverse_map = {v[index]: k for k, v in cls.jc_map.items()}
+        reverse_map = {
+            getattr(mapping, key_attr): attr for attr, mapping in cls.jc_map.items()
+        }
+
         for key, value in data.items():
             if key not in reverse_map:
                 continue

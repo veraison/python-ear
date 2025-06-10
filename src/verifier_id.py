@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.base import BaseJCSerializable
+from src.base import BaseJCSerializable, KeyMapping
 from src.errors import EARValidationError
 
 
@@ -10,8 +10,8 @@ class VerifierID(BaseJCSerializable):
     developer: str
     build: str
     jc_map = {
-        "developer": (0, "developer"),  # JC<"developer", 0>
-        "build": (1, "build"),  # JC<"build", 1>
+        "developer": KeyMapping(0, "developer"),  # JC<"developer", 0>
+        "build": KeyMapping(1, "build"),  # JC<"build", 1>
     }
 
     def validate(self):
