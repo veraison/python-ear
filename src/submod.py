@@ -11,6 +11,6 @@ class Submod(BaseJCSerializable):
     status: TrustTier
 
     jc_map = {
-        "status": KeyMapping(1000, "status"),
-        "trust_vector": KeyMapping(1001, "trust_vector"),
+        "status": KeyMapping(1000, "ear.status"),
+        "trust_vector": KeyMapping(1001, "ear.trustworthiness-vector"),
     }

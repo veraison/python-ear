@@ -33,14 +33,14 @@ def sample_trust_vector():
 
 def test_trust_vector_to_dict(sample_trust_vector):
     expected = {
-        "instance_identity": TRUSTWORTHY_INSTANCE_CLAIM.value,
+        "instance-identity": TRUSTWORTHY_INSTANCE_CLAIM.value,
         "configuration": UNSAFE_CONFIG_CLAIM.value,
         "executables": APPROVED_RUNTIME_CLAIM.value,
-        "file_system": APPROVED_FILES_CLAIM.value,
+        "file-system": APPROVED_FILES_CLAIM.value,
         "hardware": GENUINE_HARDWARE_CLAIM.value,
-        "runtime_opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
-        "storage_opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
-        "sourced_data": TRUSTED_SOURCES_CLAIM.value,
+        "runtime-opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
+        "storage-opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
+        "sourced-data": TRUSTED_SOURCES_CLAIM.value,
     }
     assert sample_trust_vector.to_dict() == expected
 
@@ -67,14 +67,14 @@ def test_trust_vector_to_int_keys(sample_trust_vector):
 
 def test_trust_vector_from_dict():
     data = {
-        "instance_identity": TRUSTWORTHY_INSTANCE_CLAIM.value,
+        "instance-identity": TRUSTWORTHY_INSTANCE_CLAIM.value,
         "configuration": UNSAFE_CONFIG_CLAIM.value,
         "executables": APPROVED_RUNTIME_CLAIM.value,
-        "file_system": APPROVED_FILES_CLAIM.value,
+        "file-system": APPROVED_FILES_CLAIM.value,
         "hardware": GENUINE_HARDWARE_CLAIM.value,
-        "runtime_opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
-        "storage_opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
-        "sourced_data": TRUSTED_SOURCES_CLAIM.value,
+        "runtime-opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
+        "storage-opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
+        "sourced-data": TRUSTED_SOURCES_CLAIM.value,
     }
     parsed_vector = TrustVector.from_dict(data)
     assert parsed_vector.to_dict() == data

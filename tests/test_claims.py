@@ -47,22 +47,22 @@ def sample_attestation_result():
 
 def test_attestation_result_to_dict(sample_attestation_result):
     expected = {
-        "profile": "test_profile",
-        "issued_at": 1234567890,
-        "verifier_id": {"developer": "Acme Inc.", "build": "v1"},
+        "eat_profile": "test_profile",
+        "iat": 1234567890,
+        "ear.verifier-id": {"developer": "Acme Inc.", "build": "v1"},
         "submods": {
             "submod1": {
-                "trust_vector": {
-                    "instance_identity": TRUSTWORTHY_INSTANCE_CLAIM.value,
+                "ear.trustworthiness-vector": {
+                    "instance-identity": TRUSTWORTHY_INSTANCE_CLAIM.value,
                     "configuration": APPROVED_CONFIG_CLAIM.value,
                     "executables": APPROVED_RUNTIME_CLAIM.value,
-                    "file_system": APPROVED_FILES_CLAIM.value,
+                    "file-system": APPROVED_FILES_CLAIM.value,
                     "hardware": GENUINE_HARDWARE_CLAIM.value,
-                    "runtime_opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
-                    "storage_opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
-                    "sourced_data": TRUSTED_SOURCES_CLAIM.value,
+                    "runtime-opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
+                    "storage-opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
+                    "sourced-data": TRUSTED_SOURCES_CLAIM.value,
                 },
-                "status": TRUST_TIER_AFFIRMING.value,
+                "ear.status": TRUST_TIER_AFFIRMING.value,
             }
         },
     }
@@ -77,22 +77,22 @@ def test_attestation_result_to_json(sample_attestation_result):
 
 def test_attestation_result_from_dict():
     data = {
-        "profile": "test_profile",
-        "issued_at": 1234567890,
-        "verifier_id": {"developer": "Acme Inc.", "build": "v1"},
+        "eat_profile": "test_profile",
+        "iat": 1234567890,
+        "ear.verifier-id": {"developer": "Acme Inc.", "build": "v1"},
         "submods": {
             "submod1": {
-                "trust_vector": {
-                    "instance_identity": TRUSTWORTHY_INSTANCE_CLAIM.value,
+                "ear.trustworthiness-vector": {
+                    "instance-identity": TRUSTWORTHY_INSTANCE_CLAIM.value,
                     "configuration": APPROVED_CONFIG_CLAIM.value,
                     "executables": APPROVED_RUNTIME_CLAIM.value,
-                    "file_system": APPROVED_FILES_CLAIM.value,
+                    "file-system": APPROVED_FILES_CLAIM.value,
                     "hardware": GENUINE_HARDWARE_CLAIM.value,
-                    "runtime_opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
-                    "storage_opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
-                    "sourced_data": TRUSTED_SOURCES_CLAIM.value,
+                    "runtime-opaque": ENCRYPTED_MEMORY_RUNTIME_CLAIM.value,
+                    "storage-opaque": HW_KEYS_ENCRYPTED_SECRETS_CLAIM.value,
+                    "sourced-data": TRUSTED_SOURCES_CLAIM.value,
                 },
-                "status": TRUST_TIER_AFFIRMING.value,
+                "ear.status": TRUST_TIER_AFFIRMING.value,
             }
         },
     }

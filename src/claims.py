@@ -21,9 +21,9 @@ class AttestationResult(BaseJCSerializable):
 
     # https://www.ietf.org/archive/id/draft-ietf-rats-eat-31.html#section-7.2.4
     jc_map = {
-        "profile": KeyMapping(265, "profile"),
-        "issued_at": KeyMapping(6, "issued_at"),
-        "verifier_id": KeyMapping(1004, "verifier_id"),
+        "profile": KeyMapping(265, "eat_profile"),
+        "issued_at": KeyMapping(6, "iat"),
+        "verifier_id": KeyMapping(1004, "ear.verifier-id"),
         "submods": KeyMapping(266, "submods"),
     }
 

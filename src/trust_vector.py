@@ -19,14 +19,14 @@ class TrustVector(BaseJCSerializable):
     sourced_data: Optional[TrustClaim] = None
 
     jc_map = {
-        "instance_identity": KeyMapping(0, "instance_identity"),
+        "instance_identity": KeyMapping(0, "instance-identity"),
         "configuration": KeyMapping(1, "configuration"),
         "executables": KeyMapping(2, "executables"),
-        "file_system": KeyMapping(3, "file_system"),
+        "file_system": KeyMapping(3, "file-system"),
         "hardware": KeyMapping(4, "hardware"),
-        "runtime_opaque": KeyMapping(5, "runtime_opaque"),
-        "storage_opaque": KeyMapping(6, "storage_opaque"),
-        "sourced_data": KeyMapping(7, "sourced_data"),
+        "runtime_opaque": KeyMapping(5, "runtime-opaque"),
+        "storage_opaque": KeyMapping(6, "storage-opaque"),
+        "sourced_data": KeyMapping(7, "sourced-data"),
     }
 
     def validate(self):
