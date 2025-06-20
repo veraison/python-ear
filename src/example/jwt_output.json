@@ -1,0 +1,36 @@
+{
+    "profile": "test_profile",
+    "issued_at": 1744932192,
+    "verifier_id": {
+        "developer": "Acme Inc.",
+        "build": "v1"
+    },
+    "submods": {
+        "submod1": {
+            "status": 2,
+            "trust_vector": {
+                "instance_identity": 97,
+                "configuration": null,
+                "executables": null,
+                "file_system": null,
+                "hardware": null,
+                "runtime_opaque": null,
+                "storage_opaque": null,
+                "sourced_data": null
+            }
+        },
+        "submod2": {
+            "status": 96,
+            "trust_vector": {
+                "instance_identity": 2,
+                "configuration": null,
+                "executables": null,
+                "file_system": null,
+                "hardware": null,
+                "runtime_opaque": null,
+                "storage_opaque": null,
+                "sourced_data": null
+            }
+        }
+    }
+}
