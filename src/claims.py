@@ -19,7 +19,7 @@ class AttestationResult(BaseJCSerializable):
     verifier_id: VerifierID
     submods: Dict[str, Submod] = field(default_factory=dict)
 
-    # https://www.ietf.org/archive/id/draft-ietf-rats-eat-31.html#section-7.2.4
+    # https://www.rfc-editor.org/rfc/rfc9711.html#section-7.2.4
     jc_map = {
         "profile": KeyMapping(265, "eat_profile"),
         "issued_at": KeyMapping(6, "iat"),
